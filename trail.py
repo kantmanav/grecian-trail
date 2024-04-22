@@ -1,14 +1,5 @@
 from random import sample
 
-global grain_cost
-global water_cost
-global grain_energy
-global water_hydration
-grain_cost = 10
-water_cost = 10
-grain_energy = 10
-water_hydration = 10
-
 global nutrition_store
 nutrition_store = []
 
@@ -50,8 +41,6 @@ class Player:
                     self.ingest(idx)
     
     def print_stats(self):
-        print("\n\n")
-        print("---------------------------------------------")
         print("Name: " + self.name)
         print("Goal: " + str(len(self.path.nodes) - 1))
         print("Position: " + str(self.pos))
@@ -66,7 +55,7 @@ class Player:
     def select_supplies(self):
         for idx in range(len(nutrition_store)):
             resource = nutrition_store[idx]
-            print("One unit of %s costs %d and increases your health by %s" %(resource.name, resource.cost, resource.gains))
+            print("One unit of %s costs $%d and increases your health by %s" %(resource.name, resource.cost, resource.gains))
         print("You have $" + str(self.money))
         # Implement money limit to buying supplies.
         print("Please delineate the quantity of each item that you would like to buy.")
@@ -79,7 +68,9 @@ class Player:
             self.resources[idx] += qty
 
     def handle_turn(self):
-        move = input("Enter your move: ")
+        print("\n\n")
+        print("---------------------------------------------")
+        move = input("Enter your move, %s: " %self.name)
         if move == "travel":
             self.travel()
         elif move == "rest":
@@ -124,9 +115,21 @@ if __name__ == "__main__":
     nutrition_store.append(water)
     nutrition_store.append(food)
     player1 = Player("Manav", path1)
+    player2 = Player("Manuj", path1)
     game_status = True
     player1.select_supplies()
+    player2.select_supplies()
     while game_status:
-        player1.handle_turn()
-        if player1.won:
+        if not player1.dead:
+            player1.handle_turn()
+            if player1.won:
+                print(player1.name + " won!!!")
+                game_status = False
+        if not player2.dead:
+            player2.handle_turn()
+            if player2.won:
+                print(player2.name + " won!!!")
+                game_status = False
+        if player1.dead and player2.dead:
+            print("Both players are dead :,(")
             game_status = False
