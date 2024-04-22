@@ -94,7 +94,7 @@ class Path:
 
 class Node:
     def __init__(self, damage, p_damage):
-        self.damage = damage
+        self.damage = damage.losses
         self.p_damage = p_damage
 
 class Damage:
@@ -110,9 +110,18 @@ class Nutrition:
         self.gains = gains
 
 if __name__ == "__main__":
-    path1 = Path([Node([20, 0, 0], 40), Node([0, 20, 0], 40), Node([0, 0, 20], 40)])
-    water = Nutrition("water", 10, [10, 0, 0])
-    food = Nutrition("grain", 10, [0, 10, 0])
+    # 3 categories of health are energy, hydration, and injury (wounds) respectively.
+    drowning = Damage([50, 0, 50])
+    monster = Damage([20, 0, 50])
+    dehydration = Damage([20, 50, 0])
+    safe = Damage([0, 0, 0])
+    # 6 nodes long
+    path1 = Path([Node(drowning, 40), Node(drowning, 20), Node(monster, 30), Node(safe, 100), Node(dehydration, 20), Node(dehydration, 40)])
+    # 9 nodes long
+    path2 = Path([Node(drowning, 10), Node(drowning, 10), Node(monster, 10), Node(safe, 100), Node(monster, 5), Node(dehydration, 10),\
+                   Node(dehydration, 10), Node(dehydration, 10), Node(safe, 100), Node(dehydration, 10)])
+    water = Nutrition("water", 10, [0, 10, 0])
+    food = Nutrition("food", 10, [10, 0, 5])
     nutrition_store.append(water)
     nutrition_store.append(food)
     player1 = Player("Manav", path1)
