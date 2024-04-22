@@ -17,10 +17,11 @@ class Player:
         self.health = [100] * 3
         self.dead = False
         self.won = False
-    
+
     def travel(self):
         self.pos += 1
         self.health[0] -= 10
+        self.health[1] -= 10
 
     # Ingest an object of class Nutrition
     def ingest(self, idx):
@@ -28,7 +29,7 @@ class Player:
         for i in range(len(self.health)):
             self.health[i] += resource.gains[i]
         self.resources[idx] -= 1
-    
+
     def rest(self):
         self.pos += 0
         self.health[0] += 10
@@ -39,7 +40,7 @@ class Player:
                 eat = input("Would you like to ingest a unit of %s? " %(resource.name))
                 if eat.lower() == "yes":
                     self.ingest(idx)
-    
+
     def print_stats(self):
         print("Name: " + self.name)
         print("Goal: " + str(len(self.path.nodes) - 1))
@@ -125,7 +126,7 @@ if __name__ == "__main__":
             if player1.won:
                 print(player1.name + " won!!!")
                 game_status = False
-        if not player2.dead:
+        if not player1.won and not player2.dead:
             player2.handle_turn()
             if player2.won:
                 print(player2.name + " won!!!")
